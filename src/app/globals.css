@@ -8,8 +8,8 @@
 }
 
 :root {
-  --background: #FFFFFF;
-  --foreground: #111827;
+  --background: #050505;
+  --foreground: #a1a1aa;
 }
 
 html {
@@ -27,12 +27,27 @@ body {
   width: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #F3F4F6;
+  background: #111;
 }
 ::-webkit-scrollbar-thumb {
-  background: #D1D5DB;
+  background: #333;
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #ff5a00;
+  background: #e11d48;
+}
+
+/* Gradient animation */
+@keyframes gradient-x {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.animate-gradient-x {
+  background-size: 200% 200%;
+  animation: gradient-x 3s ease infinite;
 }

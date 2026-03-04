@@ -1,556 +1,310 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
-  Signal, Phone, PhoneCall, Zap, TrendingUp, Headset,
-  Wifi, Smartphone, Coins, Handshake, Car, Flame,
-  MessageCircle, IdCard, Building2, MapPin, ChevronRight,
-  CheckCircle2, XCircle, Users, Award, Briefcase, HelpCircle,
-  ArrowRight
+  Phone,
+  ArrowUpRight,
+  Check,
+  X,
+  Plus,
+  Minus,
+  Play,
+  Zap
 } from 'lucide-react';
 
 export default function Home() {
-  const [showSticky, setShowSticky] = useState(false);
+  const [openFaq, setOpenFaq] = useState<number | null>(null);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 300) {
-        setShowSticky(true);
-      } else {
-        setShowSticky(false);
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  const toggleFaq = (index: number) => {
+    setOpenFaq(openFaq === index ? null : index);
+  };
 
   const faqs = [
     {
-      q: "Ali potrebujem pretekle izkušnje s prodajo?",
-      a: "Ne. Izkušnje so plus, niso pa pogoj. Za nas je pomembna tvoja osebnost, komunikativnost in želja po uspehu. Vse prodajne tehnike in znanje o storitvah ti bomo predali skozi naše intenzivno mentorstvo."
+      q: "Potrebujem izkušnje?",
+      a: "Ne. Izkušnje so plus, niso pa pogoj. Naučili vas bomo vsega – od prvega pozdrava do zaključka prodaje. Iščemo karakter, ne življenjepisa."
     },
     {
-      q: "Kaj točno bom prodajal/a?",
-      a: "Zastopal in tržil boš najnaprednejše storitve našega partnerja Telekoma Slovenije (optični internet NEO, 5G mobilni paketi, televizija). Ker prodajaš najbolj prepoznavno znamko v Sloveniji, je delo na terenu bistveno lažje."
+      q: "Kaj točno prodajam?",
+      a: "Najnaprednejše storitve Telekoma Slovenije (Optika NEO, 5G). Prodajate storitve vodilnega operaterja, kar pomeni, da so vrata pri strankah že napol odprta."
     },
     {
-      q: "Kako je sestavljeno plačilo?",
-      a: "Naš sistem je naravnan tako, da nagrajuje rezultate. Prejemaš visoke provizije za vsako uspešno sklenjeno pogodbo in dodatne mesečne bonuse za doseganje ciljev. Zgornje meje zaslužka ni."
+      q: "Kakšno je plačilo?",
+      a: "100% variabilno, brez zgornje meje. Provizije + mesečni bonusi za preseganje ciljev. Najboljši presegajo managerske prihodke. Vaš trud = vaš zaslužek."
     },
     {
-      q: "Kje točno poteka delo?",
-      a: "Delo poteka pretežno na terenu (direktna prodaja) na vnaprej določenih območjih. Delujemo po celotni Sloveniji, zato se teren pogosto prilagodi tudi tvoji regiji oziroma lokaciji."
+      q: "Kje poteka delo?",
+      a: "Na terenu, po celotni Sloveniji. Območje se prilagodi vaši regiji. Ni pisarne, ni mikromanagementa – ste zunaj, med ljudmi."
     }
   ];
 
   return (
-    <>
-      <style dangerouslySetInnerHTML={{__html: `
-        .hero-bg {
-          background-color: #050505;
-          background-image:
-            radial-gradient(circle at 15% 50%, rgba(255, 90, 0, 0.15) 0%, transparent 50%),
-            radial-gradient(circle at 85% 30%, rgba(245, 158, 11, 0.08) 0%, transparent 50%);
-        }
-        .grid-pattern {
-          background-size: 40px 40px;
-          background-image: linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-                            linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-          mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
-          -webkit-mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
-        }
-        .glass-panel {
-          background: rgba(255, 255, 255, 0.02);
-          backdrop-filter: blur(24px);
-          -webkit-backdrop-filter: blur(24px);
-          border: 1px solid rgba(255, 255, 255, 0.08);
-          box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-        }
-        .text-gradient {
-          background-clip: text;
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          background-image: linear-gradient(to right, #ffffff, #d1d5db);
-        }
-        @keyframes ring {
-          0%, 100% { transform: rotate(0deg); }
-          10% { transform: rotate(15deg); }
-          20% { transform: rotate(-10deg); }
-          30% { transform: rotate(5deg); }
-          40% { transform: rotate(-5deg); }
-          50% { transform: rotate(0deg); }
-        }
-        .animate-ring { animation: ring 2.5s ease infinite; }
+    <div className="min-h-screen bg-[#050505] font-sans text-zinc-300 selection:bg-rose-500 selection:text-white overflow-x-hidden">
 
-        @keyframes float {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-10px); }
-        }
-        .animate-float { animation: float 6s ease-in-out infinite; }
+      {/* NOISE OVERLAY FOR TEXTURE */}
+      <div className="fixed inset-0 opacity-[0.03] pointer-events-none mix-blend-overlay z-50" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E")' }}></div>
 
-        @keyframes pulse-glow {
-          0%, 100% { opacity: 1; transform: scale(1); }
-          50% { opacity: .7; transform: scale(1.05); }
-        }
-        .animate-pulse-glow { animation: pulse-glow 3s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+      {/* HEADER - Minimalist */}
+      <header className="fixed top-0 w-full z-40 px-6 py-6 mix-blend-difference">
+        <div className="max-w-[1400px] mx-auto flex justify-between items-center">
+          <div className="flex items-center gap-2 text-white font-bold text-xl tracking-tighter uppercase">
+            <Zap className="w-5 h-5 text-rose-500 fill-rose-500" />
+            SIGNAL<span className="opacity-50">PRO</span>
+          </div>
 
-        @keyframes shimmer {
-          100% { transform: translateX(100%); }
-        }
-      `}} />
+          <a href="tel:070694881" className="group flex items-center gap-2 bg-white text-black px-5 py-2.5 rounded-full text-sm font-bold uppercase tracking-wider hover:bg-rose-500 hover:text-white transition-all duration-300">
+            <span className="relative overflow-hidden h-5">
+              <span className="block group-hover:-translate-y-full transition-transform duration-300">Prijava</span>
+              <span className="block absolute top-full left-0 group-hover:-translate-y-full transition-transform duration-300">070 694 881</span>
+            </span>
+            <ArrowUpRight className="w-4 h-4 group-hover:rotate-45 transition-transform duration-300" />
+          </a>
+        </div>
+      </header>
 
-      <div className="bg-slate-50 text-slate-800 antialiased selection:bg-[#ff5a00] selection:text-white font-sans overflow-x-hidden">
+      {/* HERO SECTION - Typography Driven */}
+      <section className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 px-6 min-h-[90vh] flex flex-col justify-center">
+        {/* Glow effect */}
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-rose-600/20 rounded-full blur-[120px] pointer-events-none"></div>
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-orange-600/10 rounded-full blur-[100px] pointer-events-none"></div>
 
-        {/* Navigation */}
-        <nav className="fixed w-full z-50 bg-[#050505]/80 backdrop-blur-xl border-b border-white/5 transition-all duration-300">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex justify-between h-20 items-center">
-              <div className="flex-shrink-0 flex items-center gap-3">
-                <div className="w-10 h-10 bg-gradient-to-br from-[#ff5a00] to-amber-500 rounded-xl flex items-center justify-center text-white font-bold text-xl shadow-[0_0_15px_rgba(255,90,0,0.4)]">
-                  <Signal size={24} strokeWidth={2.5} />
+        <div className="max-w-[1400px] mx-auto w-full relative z-10">
+          <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-md mb-8">
+            <span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse"></span>
+            <span className="text-xs font-medium uppercase tracking-widest text-white">Aktivno zaposlujemo</span>
+          </div>
+
+          <h1 className="text-[12vw] leading-[0.85] font-black text-white tracking-tighter uppercase mb-8">
+            Zasluži<br/>
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-rose-500 via-orange-500 to-rose-500 animate-gradient-x">Brez meja.</span>
+          </h1>
+
+          <div className="grid lg:grid-cols-2 gap-12 items-end">
+            <p className="text-xl md:text-2xl text-zinc-400 max-w-lg font-light leading-relaxed">
+              Iščemo ambiciozne terenske prodajnike. Prevzemi iniciativo, razbij fiksni strop provizij in postani obraz najboljšega omrežja.
+            </p>
+
+            <div className="flex flex-col sm:flex-row gap-4 lg:justify-end">
+              <a href="tel:070694881" className="group relative flex items-center justify-between gap-6 bg-rose-600 text-white px-8 py-5 rounded-full overflow-hidden w-full sm:w-auto">
+                <div className="absolute inset-0 bg-white translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-in-out"></div>
+                <span className="relative z-10 font-bold uppercase tracking-wider text-sm group-hover:text-black transition-colors duration-500">Klic za razgovor</span>
+                <div className="relative z-10 w-8 h-8 rounded-full bg-black/20 flex items-center justify-center group-hover:bg-rose-600 transition-colors duration-500">
+                  <Phone className="w-4 h-4 text-white group-hover:animate-bounce" />
                 </div>
-                <span className="font-black text-2xl tracking-tighter text-white">
-                  Signal<span className="text-transparent bg-clip-text bg-gradient-to-r from-[#ff5a00] to-amber-400">Pro</span>
-                </span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* PARTNERS STRIP - Minimal Marquee style */}
+      <div className="border-y border-white/10 py-6 overflow-hidden bg-[#0a0a0a]">
+        <div className="max-w-[1400px] mx-auto px-6 flex flex-wrap lg:flex-nowrap items-center justify-between gap-8 opacity-50 uppercase tracking-widest text-xs font-bold text-white">
+          <span>Ekskluzivni partner</span>
+          <div className="flex items-center gap-3">
+            <div className="w-6 h-6 bg-blue-600 text-white flex items-center justify-center rounded-sm text-sm">T</div>
+            <span>Telekom Slovenije</span>
+          </div>
+          <span className="hidden md:block w-1.5 h-1.5 rounded-full bg-zinc-700"></span>
+          <span>Optika NEO</span>
+          <span className="hidden md:block w-1.5 h-1.5 rounded-full bg-zinc-700"></span>
+          <span>5G Omrežje</span>
+        </div>
+      </div>
+
+      {/* BENTO GRID (Zakaj mi) */}
+      <section id="zakaj-mi" className="py-32 px-6">
+        <div className="max-w-[1400px] mx-auto">
+          <h2 className="text-sm font-bold uppercase tracking-widest text-rose-500 mb-4">01 // Zakaj izbrati nas</h2>
+          <h3 className="text-4xl md:text-6xl font-black text-white uppercase tracking-tighter mb-16 max-w-3xl">
+            Tvoj potencial, naša platforma.
+          </h3>
+
+          <div className="grid md:grid-cols-3 gap-4">
+            {/* Box 1 (Span 2) */}
+            <div className="md:col-span-2 bg-[#111] border border-white/5 rounded-3xl p-10 md:p-16 relative overflow-hidden group hover:border-white/20 transition-colors duration-500">
+              <div className="absolute top-0 right-0 p-8 text-8xl font-black text-white/[0.03] group-hover:text-white/5 transition-colors duration-500">01</div>
+              <div className="relative z-10">
+                <h4 className="text-3xl md:text-5xl font-bold text-white mb-6 uppercase tracking-tight">Zaslužek<br/><span className="text-rose-500">brez stropa</span></h4>
+                <p className="text-lg text-zinc-400 max-w-md">Vaša plača je odvisna neposredno od vašega truda. Nadpovprečne provizije in mesečni bonusi. Najboljši presegajo managerske plače.</p>
               </div>
-              <div className="hidden md:flex items-center space-x-8">
-                <a href="#prednosti" className="text-slate-400 hover:text-white font-medium transition-colors">Zakaj mi?</a>
-                <a href="#komu" className="text-slate-400 hover:text-white font-medium transition-colors">Zate?</a>
-                <a href="#ekipa" className="text-slate-400 hover:text-white font-medium transition-colors">Ekipa</a>
-                <a href="tel:070694881" className="group bg-white/5 hover:bg-white/10 border border-white/10 text-white px-6 py-2.5 rounded-full font-bold transition-all duration-300 flex items-center gap-2 hover:shadow-[0_0_20px_rgba(255,90,0,0.2)] hover:border-[#ff5a00]/50">
-                  <Phone size={18} className="text-[#ff5a00] group-hover:animate-ring" />
-                  070 694 881
+              <ArrowUpRight className="absolute bottom-8 right-8 w-8 h-8 text-zinc-600 group-hover:text-rose-500 group-hover:translate-x-2 group-hover:-translate-y-2 transition-all duration-500" />
+            </div>
+
+            {/* Box 2 */}
+            <div className="bg-[#111] border border-white/5 rounded-3xl p-10 relative overflow-hidden group hover:border-white/20 transition-colors duration-500">
+              <div className="absolute top-0 right-0 p-8 text-6xl font-black text-white/[0.03] group-hover:text-white/5 transition-colors duration-500">02</div>
+              <div className="h-full flex flex-col justify-end relative z-10 pt-32">
+                <h4 className="text-2xl font-bold text-white mb-4 uppercase tracking-tight">Vrhunsko<br/>Mentorstvo</h4>
+                <p className="text-zinc-400">Nimate izkušenj? V prvem mesecu vas naučimo vsega na terenu, ob rami z najboljšimi.</p>
+              </div>
+            </div>
+
+            {/* Box 3 */}
+            <div className="md:col-span-3 bg-gradient-to-r from-rose-600 to-orange-500 rounded-3xl p-10 md:p-16 relative overflow-hidden group">
+              <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-end gap-8">
+                <div>
+                  <h4 className="text-3xl md:text-5xl font-bold text-white mb-4 uppercase tracking-tight">Dinamično Delo</h4>
+                  <p className="text-white/90 max-w-xl text-lg">Pozabite na pisarno. Ste na terenu, spoznavate ljudi in samostojno upravljate s časom. Svoboda, ki zahteva odgovornost.</p>
+                </div>
+                <a href="tel:070694881" className="flex items-center justify-center w-16 h-16 bg-white rounded-full hover:scale-110 transition-transform duration-300 shrink-0">
+                  <Play className="w-6 h-6 text-rose-600 ml-1" />
                 </a>
               </div>
             </div>
           </div>
-        </nav>
-
-        {/* Hero Section */}
-        <section className="hero-bg pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden relative min-h-[90vh] flex items-center">
-          <div className="absolute inset-0 grid-pattern pointer-events-none"></div>
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[#ff5a00]/20 rounded-full blur-[150px] opacity-40 pointer-events-none animate-pulse-glow"></div>
-          <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1556761175-4b46a572b786?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80')] bg-cover bg-center opacity-10 mix-blend-overlay"></div>
-
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
-            <div className="grid lg:grid-cols-12 gap-12 lg:gap-8 items-center">
-
-              {/* Hero Content */}
-              <div className="lg:col-span-7 text-center lg:text-left">
-                <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full glass-panel text-white text-xs sm:text-sm font-bold mb-8 uppercase tracking-widest border-[#ff5a00]/30 shadow-[0_0_20px_rgba(255,90,0,0.1)]">
-                  <span className="flex h-2.5 w-2.5 relative">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#ff5a00] opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#ff5a00]"></span>
-                  </span>
-                  Aktivno zaposlujemo na terenu
-                </div>
-
-                <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black text-white leading-[1.05] tracking-tighter mb-6">
-                  Zasluži brez meja kot <br className="hidden lg:block" />
-                  obraz <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#ff5a00] via-amber-400 to-yellow-300 drop-shadow-[0_0_30px_rgba(255,90,0,0.3)]">najboljšega omrežja.</span>
-                </h1>
-
-                <p className="text-xl sm:text-2xl text-slate-400 mb-10 max-w-2xl mx-auto lg:mx-0 font-light leading-relaxed">
-                  Iščemo ambiciozne terenske prodajnike. <span className="text-white font-semibold">Brez fiksnega stropa za provizije.</span> Vzemi kariero v svoje roke in realiziraj svoj potencial.
-                </p>
-
-                {/* Quick Stats */}
-                <div className="flex flex-wrap justify-center lg:justify-start gap-5 sm:gap-10 mb-12">
-                  <div className="flex items-center gap-3 bg-white/5 px-4 py-2 rounded-xl border border-white/5">
-                    <Zap size={20} className="text-[#ff5a00]" />
-                    <span className="text-white font-semibold text-base sm:text-lg">Takojšen začetek</span>
-                  </div>
-                  <div className="flex items-center gap-3 bg-white/5 px-4 py-2 rounded-xl border border-white/5">
-                    <TrendingUp size={20} className="text-[#ff5a00]" />
-                    <span className="text-white font-semibold text-base sm:text-lg">Visok donos</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Call to Action Card */}
-              <div className="lg:col-span-5 w-full max-w-md mx-auto relative animate-float">
-                <div className="absolute -inset-1 bg-gradient-to-br from-[#ff5a00] via-amber-500 to-transparent rounded-[2.5rem] blur-2xl opacity-40"></div>
-
-                <div className="glass-panel rounded-[2.5rem] p-8 sm:p-10 relative overflow-hidden border border-white/10">
-                  <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#ff5a00] to-transparent opacity-70"></div>
-                  <div className="absolute -top-24 -right-24 w-48 h-48 bg-[#ff5a00]/30 rounded-full blur-3xl"></div>
-
-                  <div className="text-center mb-8 relative z-10">
-                    <div className="w-20 h-20 bg-gradient-to-br from-[#ff5a00]/20 to-amber-500/20 rounded-2xl flex items-center justify-center text-[#ff5a00] mx-auto mb-6 border border-[#ff5a00]/30 shadow-[0_0_30px_rgba(255,90,0,0.2)]">
-                      <Headset size={40} />
-                    </div>
-                    <h2 className="text-3xl font-black text-white mb-3 tracking-tight">Prevzemi iniciativo.</h2>
-                    <p className="text-slate-400 font-medium text-sm sm:text-base">Za prijavo in kratek razgovor nas enostavno pokliči. Dosegljivi smo vsak delovnik.</p>
-                  </div>
-
-                  <a href="tel:070694881" className="group block w-full bg-gradient-to-r from-[#ff5a00] to-amber-500 hover:from-[#cc4800] hover:to-[#ff5a00] text-white rounded-3xl p-[2px] transition-all duration-300 transform hover:scale-[1.03] shadow-[0_0_50px_rgba(255,90,0,0.4)] hover:shadow-[0_0_70px_rgba(255,90,0,0.6)] relative z-10">
-                    <div className="bg-[#050505]/30 backdrop-blur-sm group-hover:bg-transparent rounded-[22px] p-5 sm:p-6 flex flex-col items-center justify-center transition-all duration-300 h-full">
-                      <span className="text-xs sm:text-sm font-bold uppercase tracking-widest mb-2 text-white/90 drop-shadow-md">Klikni za klic</span>
-                      <div className="flex items-center gap-4">
-                        <PhoneCall size={36} className="group-hover:animate-ring drop-shadow-lg" />
-                        <span className="text-4xl sm:text-5xl font-black tracking-tighter drop-shadow-lg">070 694 881</span>
-                      </div>
-                    </div>
-                  </a>
-
-                  <div className="mt-8 flex items-center justify-center gap-2 text-sm text-slate-300 bg-black/40 py-2.5 px-5 rounded-full border border-white/5 relative z-10 w-max mx-auto">
-                    <span className="relative flex h-3 w-3">
-                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                      <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
-                    </span>
-                    <span className="font-medium">Vodja prodaje je dosegljiv</span>
-                  </div>
-                </div>
-              </div>
-
-            </div>
-          </div>
-        </section>
-
-        {/* Brands Marquee */}
-        <div className="bg-white py-10 border-b border-slate-200 shadow-sm relative z-20 -mt-2 lg:-mt-8 rounded-t-[2.5rem] sm:rounded-none">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <p className="text-xs font-black text-slate-400 uppercase tracking-[0.2em] text-center mb-8">Ponosno tržimo storitve partnerja</p>
-            <div className="flex flex-wrap justify-center items-center gap-10 md:gap-24">
-              <div className="text-3xl font-black text-[#ff5a00] flex items-center gap-3 transition-transform duration-300 hover:scale-105 opacity-90 hover:opacity-100">
-                <span className="font-serif">T</span> Telekom Slovenije
-              </div>
-              <div className="text-2xl font-bold text-slate-800 flex items-center gap-3 transition-transform duration-300 hover:scale-105">
-                <Wifi className="text-[#ff5a00]" size={28} /> Optika NEO
-              </div>
-              <div className="text-2xl font-bold text-slate-800 flex items-center gap-3 transition-transform duration-300 hover:scale-105">
-                <Smartphone className="text-[#ff5a00]" size={28} /> 5G Omrežje
-              </div>
-            </div>
-          </div>
         </div>
+      </section>
 
-        {/* Benefits Section */}
-        <section id="prednosti" className="py-28 bg-slate-50 relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-[#ff5a00]/5 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/3"></div>
-
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div className="text-center max-w-3xl mx-auto mb-20">
-              <h2 className="text-[#ff5a00] font-black tracking-[0.2em] uppercase text-sm mb-4">Tvoj potencial</h2>
-              <h3 className="text-4xl md:text-5xl font-black text-slate-900 mb-6 tracking-tight">Zakaj izbrati ekipo Signal Pro?</h3>
-              <p className="text-xl text-slate-600 font-light leading-relaxed">Za vrhunske rezultate ne rabiš fakultete. Rabiš pravo miselnost, trdo kožo in ekipo, ki te neizprosno potisne naprej.</p>
-            </div>
-
-            <div className="grid md:grid-cols-3 gap-8 relative">
-              <div className="hidden md:block absolute top-14 left-[15%] right-[15%] h-[2px] bg-gradient-to-r from-transparent via-[#ff5a00]/20 to-transparent"></div>
-
-              {/* Benefit 1 */}
-              <div className="bg-white rounded-[2rem] p-10 shadow-xl shadow-slate-200/50 hover:shadow-[0_20px_40px_rgba(255,90,0,0.1)] transition-all duration-300 border border-slate-100 group hover:-translate-y-3 relative z-10">
-                <div className="w-20 h-20 bg-gradient-to-br from-orange-50 to-amber-50 rounded-2xl flex items-center justify-center text-[#ff5a00] mb-8 group-hover:scale-110 transition-transform duration-300 shadow-inner border border-orange-100">
-                  <Coins size={32} />
-                </div>
-                <h4 className="text-2xl font-bold text-slate-900 mb-4 tracking-tight">Zaslužek brez stropa</h4>
-                <p className="text-slate-600 leading-relaxed font-medium">Tvoja plača je odvisna neposredno od tvojega truda. Ponujamo nadpovprečne provizije in mesečne bonuse. Najboljši pri nas presegajo managerske plače.</p>
-              </div>
-
-              {/* Benefit 2 */}
-              <div className="bg-white rounded-[2rem] p-10 shadow-xl shadow-slate-200/50 hover:shadow-[0_20px_40px_rgba(255,90,0,0.1)] transition-all duration-300 border border-slate-100 group hover:-translate-y-3 relative z-10">
-                <div className="w-20 h-20 bg-gradient-to-br from-orange-50 to-amber-50 rounded-2xl flex items-center justify-center text-[#ff5a00] mb-8 group-hover:scale-110 transition-transform duration-300 shadow-inner border border-orange-100">
-                  <Handshake size={32} />
-                </div>
-                <h4 className="text-2xl font-bold text-slate-900 mb-4 tracking-tight">Vrhunsko mentorstvo</h4>
-                <p className="text-slate-600 leading-relaxed font-medium">Nimaš izkušenj s prodajo? Ni problema. V prvem mesecu te naučimo vseh tehnik za uspeh na terenu. Delaš ob rami z najboljšimi prodajalci v državi.</p>
-              </div>
-
-              {/* Benefit 3 */}
-              <div className="bg-white rounded-[2rem] p-10 shadow-xl shadow-slate-200/50 hover:shadow-[0_20px_40px_rgba(255,90,0,0.1)] transition-all duration-300 border border-slate-100 group hover:-translate-y-3 relative z-10">
-                <div className="w-20 h-20 bg-gradient-to-br from-orange-50 to-amber-50 rounded-2xl flex items-center justify-center text-[#ff5a00] mb-8 group-hover:scale-110 transition-transform duration-300 shadow-inner border border-orange-100">
-                  <Car size={32} />
-                </div>
-                <h4 className="text-2xl font-bold text-slate-900 mb-4 tracking-tight">Dinamično delo</h4>
-                <p className="text-slate-600 leading-relaxed font-medium">Pozabi na dolgčas za pisarniško mizo. Si na terenu, spoznavaš nove ljudi in v veliki meri sam upravljaš s svojim časom. Svoboda, ki je nima vsak.</p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Komu je pisano na kožo (Polarization Section) */}
-        <section id="komu" className="py-24 bg-white border-y border-slate-100 relative">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center max-w-3xl mx-auto mb-16">
-              <h2 className="text-[#ff5a00] font-black tracking-[0.2em] uppercase text-sm mb-4">Filtriramo najboljše</h2>
-              <h3 className="text-3xl md:text-5xl font-black text-slate-900 mb-6 tracking-tight">Odkrito povedano: To delo ni za vsakogar.</h3>
-              <p className="text-xl text-slate-600 font-light leading-relaxed">Terenska prodaja zahteva specifičen karakter. Poglej, ali se prepoznaš v naših vrstah preden nas pokličeš.</p>
-            </div>
-
-            <div className="grid md:grid-cols-2 gap-8 lg:gap-12 max-w-5xl mx-auto">
-              {/* The "YES" Profile */}
-              <div className="bg-green-50/50 rounded-[2rem] p-8 sm:p-10 border border-green-100 shadow-lg shadow-green-100/20 relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-green-200/30 rounded-bl-full -mr-8 -mt-8"></div>
-                <div className="flex items-center gap-4 mb-8">
-                  <div className="w-14 h-14 bg-green-100 rounded-2xl flex items-center justify-center text-green-600">
-                    <CheckCircle2 size={32} />
-                  </div>
-                  <h4 className="text-2xl font-bold text-slate-900">POPOLN FIT (DA)</h4>
-                </div>
-                <ul className="space-y-5">
-                  <li className="flex gap-4">
-                    <CheckCircle2 className="text-green-500 shrink-0 mt-0.5" size={20} />
-                    <span className="text-slate-700 font-medium">Imaš &quot;lakoto&quot; po uspehu in želiš nadpovprečen zaslužek, ki si ga krojiš sam.</span>
-                  </li>
-                  <li className="flex gap-4">
-                    <CheckCircle2 className="text-green-500 shrink-0 mt-0.5" size={20} />
-                    <span className="text-slate-700 font-medium">Si komunikativna, samozavestna oseba, ki hitro naveže stik z neznanci.</span>
-                  </li>
-                  <li className="flex gap-4">
-                    <CheckCircle2 className="text-green-500 shrink-0 mt-0.5" size={20} />
-                    <span className="text-slate-700 font-medium">Se ne bojiš terena in zavrnitve (beseda &quot;ne&quot; ti predstavlja izziv, ne ovire).</span>
-                  </li>
-                  <li className="flex gap-4">
-                    <CheckCircle2 className="text-green-500 shrink-0 mt-0.5" size={20} />
-                    <span className="text-slate-700 font-medium">Želiš kariero kjer trud dejansko prinese finančno svobodo.</span>
-                  </li>
-                </ul>
-              </div>
-
-              {/* The "NO" Profile */}
-              <div className="bg-red-50/50 rounded-[2rem] p-8 sm:p-10 border border-red-100 shadow-lg shadow-red-100/20 relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-red-200/30 rounded-bl-full -mr-8 -mt-8"></div>
-                <div className="flex items-center gap-4 mb-8">
-                  <div className="w-14 h-14 bg-red-100 rounded-2xl flex items-center justify-center text-red-600">
-                    <XCircle size={32} />
-                  </div>
-                  <h4 className="text-2xl font-bold text-slate-900">TO NI ZATE (NE)</h4>
-                </div>
-                <ul className="space-y-5">
-                  <li className="flex gap-4">
-                    <XCircle className="text-red-500 shrink-0 mt-0.5" size={20} />
-                    <span className="text-slate-700 font-medium">Iščeš udobno službo v pisarni kjer se 8 ur skrivaš za ekranom.</span>
-                  </li>
-                  <li className="flex gap-4">
-                    <XCircle className="text-red-500 shrink-0 mt-0.5" size={20} />
-                    <span className="text-slate-700 font-medium">Si zadovoljen s povprečno fiksno plačo brez ambicij po višjih zaslužkih.</span>
-                  </li>
-                  <li className="flex gap-4">
-                    <XCircle className="text-red-500 shrink-0 mt-0.5" size={20} />
-                    <span className="text-slate-700 font-medium">Ti je hitro neprijetno v komunikaciji z novimi, neznanimi ljudmi.</span>
-                  </li>
-                  <li className="flex gap-4">
-                    <XCircle className="text-red-500 shrink-0 mt-0.5" size={20} />
-                    <span className="text-slate-700 font-medium">Hitro obupaš in iščeš izgovore zakaj se &quot;nekaj ne da narediti&quot;.</span>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* High-Impact Testimonial */}
-        <section id="ekipa" className="py-32 bg-[#050505] text-white relative overflow-hidden">
-          <div className="absolute inset-0 grid-pattern opacity-30"></div>
-          <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-[#ff5a00]/10 rounded-full blur-[100px] opacity-70"></div>
-          <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-amber-500/10 rounded-full blur-[100px] opacity-70"></div>
-
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
-
-              <div className="relative">
-                <div className="absolute -top-12 -left-8 md:-left-12 text-[180px] text-white/5 font-serif leading-none">&ldquo;</div>
-                <h3 className="text-3xl sm:text-4xl md:text-5xl font-black mb-10 leading-tight tracking-tighter text-gradient relative z-10">
-                  &ldquo;Pred letom dni nisem imel izkušenj s prodajo. Danes zaslužim 3x več kot na prejšnjem delovnem mestu.&rdquo;
-                </h3>
-                <div className="mt-10">
-                  <h4 className="font-black text-2xl tracking-tight text-white">Milan Tešić</h4>
-                  <p className="text-[#ff5a00] font-bold uppercase tracking-wider text-sm mt-1">Terenski svetovalec, 1 leto v ekipi</p>
-                </div>
-              </div>
-
-              <div className="lg:pl-16 relative">
-                <div className="glass-panel p-10 rounded-[2.5rem]">
-                  <h2 className="text-[#ff5a00] font-black tracking-[0.2em] uppercase text-xs mb-4">Postani del ekipe</h2>
-                  <h3 className="text-3xl font-black mb-8 text-white tracking-tight">Kaj pričakujemo od tebe?</h3>
-
-                  <ul className="space-y-8">
-                    <li className="flex gap-5 items-start">
-                      <div className="mt-1 w-10 h-10 rounded-xl bg-[#ff5a00]/20 flex items-center justify-center text-[#ff5a00] flex-shrink-0 border border-[#ff5a00]/30">
-                        <Flame size={20} />
-                      </div>
-                      <div>
-                        <h4 className="text-xl font-bold mb-2 text-white">Željo po dokazovanju</h4>
-                        <p className="text-slate-400 font-medium">Ne iščemo ljudi, ki želijo samo preživeti mesec. Iščemo posameznike, ki želijo uspeti in zaslužiti.</p>
-                      </div>
-                    </li>
-                    <li className="flex gap-5 items-start">
-                      <div className="mt-1 w-10 h-10 rounded-xl bg-[#ff5a00]/20 flex items-center justify-center text-[#ff5a00] flex-shrink-0 border border-[#ff5a00]/30">
-                        <MessageCircle size={20} />
-                      </div>
-                      <div>
-                        <h4 className="text-xl font-bold mb-2 text-white">Komunikativnost</h4>
-                        <p className="text-slate-400 font-medium">Tvoje glavno orodje je tvoj glas. Biti moraš odprt in imeti veselje do dela z ljudmi in prepričevanja.</p>
-                      </div>
-                    </li>
-                    <li className="flex gap-5 items-start">
-                      <div className="mt-1 w-10 h-10 rounded-xl bg-[#ff5a00]/20 flex items-center justify-center text-[#ff5a00] flex-shrink-0 border border-[#ff5a00]/30">
-                        <IdCard size={20} />
-                      </div>
-                      <div>
-                        <h4 className="text-xl font-bold mb-2 text-white">Vozniški izpit B kategorije</h4>
-                        <p className="text-slate-400 font-medium">Ključen pogoj za mobilnost in nemoteno pokrivanje terena obravnavanih strank.</p>
-                      </div>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-
-            </div>
-          </div>
-        </section>
-
-        {/* Process Section (Steps) */}
-        <section className="py-24 bg-slate-50 relative border-b border-slate-200">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center max-w-3xl mx-auto mb-16">
-              <h2 className="text-[#ff5a00] font-black tracking-[0.2em] uppercase text-sm mb-4">Tvoja pot do uspeha</h2>
-              <h3 className="text-3xl md:text-5xl font-black text-slate-900 mb-6 tracking-tight">Kako izgleda postopek?</h3>
-              <p className="text-xl text-slate-600 font-light leading-relaxed">Pozabi na dolge motivacijske spise in 5 krogov intervjujev. Cenimo akcijo in učinkovitost.</p>
-            </div>
-
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 relative">
-              <div className="hidden lg:block absolute top-12 left-[10%] right-[10%] h-[2px] bg-slate-200"></div>
-
-              {/* Step 1 */}
-              <div className="relative text-center group">
-                <div className="w-24 h-24 mx-auto bg-white rounded-full flex items-center justify-center text-[#ff5a00] text-3xl font-black shadow-lg shadow-slate-200 border-[4px] border-slate-50 relative z-10 group-hover:scale-110 group-hover:border-[#ff5a00] transition-all duration-300">
-                  1
-                </div>
-                <h4 className="text-xl font-bold text-slate-900 mt-6 mb-3">Hitri klic</h4>
-                <p className="text-slate-600 font-medium px-4">Pokličeš nas na številko 070 694 881 za kratek 5-minutni spoznavni pogovor.</p>
-              </div>
-
-              {/* Step 2 */}
-              <div className="relative text-center group">
-                <div className="w-24 h-24 mx-auto bg-white rounded-full flex items-center justify-center text-[#ff5a00] text-3xl font-black shadow-lg shadow-slate-200 border-[4px] border-slate-50 relative z-10 group-hover:scale-110 group-hover:border-[#ff5a00] transition-all duration-300">
-                  2
-                </div>
-                <h4 className="text-xl font-bold text-slate-900 mt-6 mb-3">Razgovor v živo</h4>
-                <p className="text-slate-600 font-medium px-4">V 48 urah se dobimo na kavi ali v pisarni. Spoznaš ekipo in način dela.</p>
-              </div>
-
-              {/* Step 3 */}
-              <div className="relative text-center group">
-                <div className="w-24 h-24 mx-auto bg-white rounded-full flex items-center justify-center text-[#ff5a00] text-3xl font-black shadow-lg shadow-slate-200 border-[4px] border-slate-50 relative z-10 group-hover:scale-110 group-hover:border-[#ff5a00] transition-all duration-300">
-                  3
-                </div>
-                <h4 className="text-xl font-bold text-slate-900 mt-6 mb-3">Intenzivno uvajanje</h4>
-                <p className="text-slate-600 font-medium px-4">Greš na teren z najboljšim mentorjem, ki ti v praksi pokaže kako sklepati posle.</p>
-              </div>
-
-              {/* Step 4 */}
-              <div className="relative text-center group">
-                <div className="w-24 h-24 mx-auto bg-[#ff5a00] rounded-full flex items-center justify-center text-white text-3xl font-black shadow-xl shadow-[#ff5a00]/30 border-[4px] border-slate-50 relative z-10 group-hover:scale-110 transition-all duration-300">
-                  <Award size={36} />
-                </div>
-                <h4 className="text-xl font-bold text-slate-900 mt-6 mb-3">Tvoj prvi zaslužek</h4>
-                <p className="text-slate-600 font-medium px-4">Samostojno delo na terenu in prvi visoki bonusi za uspešno prodajo.</p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* FAQ Section */}
-        <section className="py-24 bg-white relative">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-16">
-              <h2 className="text-[#ff5a00] font-black tracking-[0.2em] uppercase text-sm mb-4">Brez skrivnosti</h2>
-              <h3 className="text-3xl md:text-5xl font-black text-slate-900 mb-6 tracking-tight">Pogosta vprašanja</h3>
-            </div>
-
-            <div className="grid gap-6">
-              {faqs.map((faq, index) => (
-                <div key={index} className="bg-slate-50 rounded-2xl p-6 sm:p-8 border border-slate-100 hover:border-[#ff5a00]/30 hover:shadow-md transition-all">
-                  <div className="flex gap-4 items-start">
-                    <HelpCircle className="text-[#ff5a00] shrink-0 mt-1" size={24} />
-                    <div>
-                      <h4 className="text-xl font-bold text-slate-900 mb-3">{faq.q}</h4>
-                      <p className="text-slate-600 font-medium leading-relaxed">{faq.a}</p>
-                    </div>
-                  </div>
-                </div>
+      {/* SPLIT SECTION (Da / Ne) */}
+      <section id="zate" className="border-y border-white/5">
+        <div className="grid lg:grid-cols-2">
+          {/* YES SIDE */}
+          <div className="p-12 md:p-24 bg-[#0a0a0a] border-b lg:border-b-0 lg:border-r border-white/5 relative group">
+            <h2 className="text-sm font-bold uppercase tracking-widest text-emerald-500 mb-12">Iščemo ta profil (DA)</h2>
+            <ul className="space-y-8 relative z-10">
+              {[
+                "Lakota po uspehu in želja po nadpovprečnem zaslužku.",
+                "Komunikativnost in hitro navezovanje stikov.",
+                "Zavrnitev ('ne') predstavlja izziv, ne oviro.",
+                "Želja po karieri, kjer trud prinaša finančno svobodo."
+              ].map((text, i) => (
+                <li key={i} className="flex gap-6 items-start">
+                  <div className="mt-1 bg-emerald-500/10 text-emerald-500 p-2 rounded-full"><Check className="w-5 h-5" /></div>
+                  <p className="text-xl md:text-2xl text-white font-medium tracking-tight">{text}</p>
+                </li>
               ))}
-            </div>
+            </ul>
           </div>
-        </section>
 
-        {/* Massive Final CTA Section */}
-        <section className="relative py-28 lg:py-36 bg-[#ff5a00] overflow-hidden">
-          <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-[0.15] mix-blend-multiply"></div>
-          <div className="absolute -top-24 -right-24 w-96 h-96 bg-white/20 rounded-full blur-3xl"></div>
-          <div className="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-[#cc4800]/50 to-transparent"></div>
-
-          <div className="max-w-5xl mx-auto px-4 text-center relative z-10">
-            <h2 className="text-5xl md:text-7xl font-black text-white mb-6 tracking-tighter leading-[1.05]">Ne čakaj na priložnost.<br />Ustvari jo.</h2>
-            <p className="text-xl md:text-2xl text-white/90 mb-14 font-medium max-w-2xl mx-auto">Število mest v naši mentorirani ekipi je strogo omejeno. Pokliči zdaj in si zagotovi razgovor še ta teden.</p>
-
-            <a href="tel:070694881" className="inline-flex flex-col sm:flex-row items-center gap-4 bg-white text-[#ff5a00] hover:bg-slate-50 px-10 py-6 rounded-[2rem] font-black text-3xl md:text-4xl transition-all duration-300 shadow-[0_30px_60px_rgba(0,0,0,0.4)] transform hover:-translate-y-2 hover:scale-105 group relative overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-0 group-hover:opacity-100 group-hover:animate-[shimmer_1.5s_infinite] -translate-x-full group-hover:translate-x-full transition-all duration-1000"></div>
-
-              <span className="flex items-center gap-5 relative z-10">
-                <PhoneCall size={40} className="group-hover:animate-ring" />
-                POKLIČI: 070 694 881
-              </span>
-            </a>
-            <p className="mt-8 text-white/80 font-bold uppercase tracking-widest text-sm">Klikni na gumb in nas pokliči direktno s telefona</p>
-          </div>
-        </section>
-
-        {/* Footer */}
-        <footer className="bg-[#050505] text-slate-400 py-16 border-t border-white/5 relative z-10">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-3 gap-12">
-            <div>
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-12 h-12 bg-gradient-to-br from-[#ff5a00] to-amber-500 rounded-xl flex items-center justify-center text-white font-bold text-xl shadow-[0_0_15px_rgba(255,90,0,0.3)]">
-                  <Signal size={28} />
-                </div>
-                <span className="font-black text-3xl tracking-tighter text-white">Signal<span className="text-[#ff5a00]">Pro</span></span>
-              </div>
-              <p className="text-sm leading-relaxed font-medium">Ekskluzivni zunanji partner za neposredno prodajo storitev Telekoma Slovenije na terenu. Gradimo najbolj prodorno ekipo v državi.</p>
-            </div>
-            <div>
-              <h4 className="text-white font-black mb-6 text-lg tracking-[0.15em] uppercase">Kontakt za prijavo</h4>
-              <ul className="space-y-5 text-sm font-bold">
-                <li>
-                  <a href="tel:070694881" className="inline-flex items-center gap-3 hover:text-[#ff5a00] transition-colors text-xl text-white bg-white/5 px-4 py-2 rounded-lg border border-white/5">
-                    <Phone size={20} className="text-[#ff5a00]" /> 070 694 881
-                  </a>
+          {/* NO SIDE */}
+          <div className="p-12 md:p-24 bg-[#050505] relative group">
+            <h2 className="text-sm font-bold uppercase tracking-widest text-zinc-600 mb-12">To ni zate, če (NE)</h2>
+            <ul className="space-y-8 relative z-10">
+              {[
+                "Iščete udobno službo s fiksno, nevariabilno plačo.",
+                "Vam je komunikacija z neznanci neprijetna.",
+                "Hitro obupate ob prvih ovirah.",
+                "Nimate ambicij po višjih zaslužkih."
+              ].map((text, i) => (
+                <li key={i} className="flex gap-6 items-start opacity-50">
+                  <div className="mt-1 bg-zinc-800 text-zinc-500 p-2 rounded-full"><X className="w-5 h-5" /></div>
+                  <p className="text-xl md:text-2xl text-zinc-400 font-medium tracking-tight">{text}</p>
                 </li>
-                <li className="flex items-start gap-3 px-2 mt-2">
-                  <Building2 size={20} className="text-[#ff5a00] mt-1 shrink-0" />
-                  <div><span className="text-white">SignalPro d.o.o.</span><br/><span className="text-slate-400 font-normal">Štihova ulica 13<br/>1000 Ljubljana</span></div>
-                </li>
-                <li className="flex items-center gap-3 px-2">
-                  <MapPin size={20} className="text-[#ff5a00] shrink-0" /> Terensko delo - vsa Slovenija
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="text-white font-black mb-6 text-lg tracking-[0.15em] uppercase">Povezave</h4>
-              <ul className="space-y-3 text-sm font-medium">
-                <li><a href="/politika-zasebnosti" className="hover:text-[#ff5a00] transition-colors flex items-center gap-2"><ChevronRight size={16} className="text-[#ff5a00]/50" /> Politika zasebnosti</a></li>
-                <li><a href="/splosni-pogoji" className="hover:text-[#ff5a00] transition-colors flex items-center gap-2"><ChevronRight size={16} className="text-[#ff5a00]/50" /> Splošni pogoji</a></li>
-              </ul>
-            </div>
+              ))}
+            </ul>
           </div>
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16 pt-8 border-t border-white/5 text-sm text-center md:text-left flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="font-medium">&copy; 2026 SignalPro d.o.o. Vse pravice pridržane.</p>
-            <p className="text-xs opacity-50 font-bold uppercase tracking-wider">
-              Optimizirano za inbound prijave. | Crafted by <a href="https://www.nirodigital.com" target="_blank" rel="noreferrer" className="text-[#ff5a00] hover:text-white transition-colors">Niro Digital</a>
-            </p>
-          </div>
-        </footer>
-
-        {/* Mobile Sticky CTA Bottom Bar */}
-        <div className={`fixed bottom-0 left-0 right-0 p-4 bg-[#050505]/95 backdrop-blur-xl border-t border-white/10 shadow-[0_-20px_40px_rgba(0,0,0,0.6)] md:hidden z-50 transform transition-transform duration-300 ${showSticky ? 'translate-y-0' : 'translate-y-full'}`}>
-          <a href="tel:070694881" className="w-full bg-gradient-to-r from-[#ff5a00] to-amber-500 text-white font-black text-xl py-4 rounded-2xl shadow-[0_0_25px_rgba(255,90,0,0.4)] flex justify-center items-center gap-3 active:scale-95 transition-transform">
-            <PhoneCall size={24} className="animate-ring" /> POKLIČI ZDAJ
-          </a>
         </div>
-      </div>
-    </>
+      </section>
+
+      {/* TYPOGRAPHIC TESTIMONIAL */}
+      <section className="py-32 px-6 bg-rose-600 text-white selection:bg-black selection:text-white">
+        <div className="max-w-[1400px] mx-auto flex flex-col md:flex-row gap-12 items-start">
+          <div className="text-[12rem] leading-none font-black opacity-20 mt-[-4rem]">&ldquo;</div>
+          <div>
+            <h3 className="text-4xl md:text-6xl lg:text-7xl font-bold uppercase tracking-tighter mb-12 max-w-5xl leading-[0.9]">
+              Pred letom dni nisem imel izkušenj s prodajo. Danes zaslužim 3x več kot na prejšnjem delovnem mestu.
+            </h3>
+            <div className="flex items-center gap-6 uppercase tracking-widest text-sm font-bold">
+              <span className="w-12 h-px bg-white/50"></span>
+              <p>Milan Tešić / <span className="text-black/60">Terenski svetovalec</span></p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* BIG LIST EXPECTATIONS */}
+      <section className="py-32 px-6">
+        <div className="max-w-[1400px] mx-auto">
+          <div className="flex justify-between items-end border-b border-white/10 pb-12 mb-12">
+            <h2 className="text-4xl md:text-6xl font-black text-white uppercase tracking-tighter">Naša<br/>pričakovanja</h2>
+            <p className="text-rose-500 font-bold uppercase tracking-widest text-sm hidden md:block">Postani del ekipe</p>
+          </div>
+
+          <div className="space-y-0">
+            {[
+              { title: "Želja po dokazovanju", desc: "Ne iščemo ljudi, ki želijo samo preživeti mesec. Iščemo posameznike, ki želijo uspeti in zaslužiti." },
+              { title: "Komunikativnost", desc: "Tvoje glavno orodje je tvoj glas. Biti moraš odprt in imeti veselje do dela z ljudmi in prepričevanja." },
+              { title: "Vozniški izpit B", desc: "Ključen pogoj za mobilnost in nemoteno pokrivanje terena obravnavanih strank." }
+            ].map((item, i) => (
+              <div key={i} className="group border-b border-white/5 py-12 flex flex-col md:flex-row md:items-center justify-between gap-8 hover:px-6 transition-all duration-500 hover:bg-white/[0.02]">
+                <div className="flex items-center gap-8">
+                  <span className="text-5xl md:text-7xl font-black text-white/10 group-hover:text-rose-500 transition-colors duration-500">0{i+1}</span>
+                  <h3 className="text-3xl md:text-4xl font-bold text-white uppercase tracking-tight">{item.title}</h3>
+                </div>
+                <p className="text-zinc-500 max-w-sm text-lg md:text-right group-hover:text-zinc-300 transition-colors duration-500">{item.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* MINIMAL FAQ */}
+      <section className="py-32 px-6 bg-[#0a0a0a]">
+        <div className="max-w-[1400px] mx-auto grid lg:grid-cols-12 gap-16">
+          <div className="lg:col-span-4">
+            <h2 className="text-sm font-bold uppercase tracking-widest text-rose-500 mb-4">Pogosta vprašanja</h2>
+            <h3 className="text-4xl md:text-5xl font-black text-white uppercase tracking-tighter mb-8">Brez<br/>skrivnosti.</h3>
+            <p className="text-zinc-500 text-lg">Vse karte na mizo. Jasni odgovori za jasne odločitve.</p>
+          </div>
+
+          <div className="lg:col-span-8 space-y-2">
+            {faqs.map((faq, index) => (
+              <div key={index} className="border-b border-white/10">
+                <button
+                  className="w-full py-8 flex justify-between items-center text-left group focus:outline-none"
+                  onClick={() => toggleFaq(index)}
+                >
+                  <span className={`text-2xl md:text-3xl font-bold uppercase tracking-tight transition-colors duration-300 ${openFaq === index ? 'text-white' : 'text-zinc-400 group-hover:text-white'}`}>
+                    {faq.q}
+                  </span>
+                  <div className={`w-12 h-12 rounded-full border flex items-center justify-center transition-all duration-300 shrink-0 ml-4 ${openFaq === index ? 'border-rose-500 text-rose-500' : 'border-white/10 text-white group-hover:border-white'}`}>
+                    {openFaq === index ? <Minus className="w-5 h-5" /> : <Plus className="w-5 h-5" />}
+                  </div>
+                </button>
+                <div
+                  className={`overflow-hidden transition-all duration-500 ease-in-out ${
+                    openFaq === index ? 'max-h-96 pb-12 opacity-100' : 'max-h-0 opacity-0'
+                  }`}
+                >
+                  <p className="text-xl text-zinc-400 font-light leading-relaxed max-w-2xl">
+                    {faq.a}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* MASSIVE FOOTER */}
+      <footer className="bg-rose-600 text-white pt-32 pb-12 px-6 flex flex-col justify-between min-h-[80vh] relative overflow-hidden">
+        {/* Giant background text */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full text-center pointer-events-none">
+          <h2 className="text-[20vw] font-black opacity-10 leading-none uppercase tracking-tighter">SignalPro</h2>
+        </div>
+
+        <div className="max-w-[1400px] mx-auto w-full relative z-10 flex flex-col items-center text-center">
+          <h3 className="text-5xl md:text-8xl font-black uppercase tracking-tighter mb-12">
+            Ne čakaj.<br/>Ustvari.
+          </h3>
+          <a href="tel:070694881" className="group flex items-center justify-center gap-4 bg-black text-white px-10 py-6 rounded-full text-2xl font-bold uppercase tracking-wider hover:bg-white hover:text-black transition-all duration-500 hover:scale-105">
+            070 694 881
+            <ArrowUpRight className="w-8 h-8 group-hover:rotate-45 transition-transform duration-300" />
+          </a>
+          <p className="mt-8 font-medium tracking-widest uppercase text-sm opacity-80">Število mest je strogo omejeno.</p>
+        </div>
+
+        <div className="max-w-[1400px] mx-auto w-full relative z-10 mt-32 flex flex-col md:flex-row justify-between items-center gap-8 border-t border-black/10 pt-8 uppercase tracking-widest text-xs font-bold">
+          <div className="flex gap-8">
+            <a href="#" className="hover:text-black transition-colors">Politika zasebnosti</a>
+            <a href="#" className="hover:text-black transition-colors">Splošni pogoji</a>
+          </div>
+          <div>
+            &copy; 2026 SIGNALPRO. <span className="opacity-60">Crafted by Niro Digital.</span>
+          </div>
+        </div>
+      </footer>
+    </div>
   );
 }
